@@ -5,6 +5,8 @@ import repository.db.impl.IznajmljivanjeRepository;
 import repository.db.impl.KorisnikRepository;
 import repository.db.impl.OsobaRepository;
 import repository.db.impl.TrotinetRepository;
+import so.AbstractSO;
+import so.korisnik.AddKorisnikSO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -63,7 +65,9 @@ public class Controller {
     }
 
     public void addKorisnik(Korisnik korisnik) throws Exception {
-        storageKorisnik.connect();
+        AbstractSO addKorisnikSO = new AddKorisnikSO();
+        addKorisnikSO.execute(korisnik);
+        /*storageKorisnik.connect();
         try {
             storageKorisnik.add(korisnik);
             storageKorisnik.commit();
@@ -73,7 +77,7 @@ public class Controller {
             throw e;
         } finally {
             storageKorisnik.disconnect();
-        }
+        }*/
     }
 
     public void addVoznja(IznajmljivanjeTrotineta iznajmljivanjeTrotineta) throws Exception {
