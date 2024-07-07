@@ -1,18 +1,13 @@
 package server;
 
-import communication.*;
-import controller.Controller;
-import domain.Korisnik;
-
-import java.io.BufferedOutputStream;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.net.ServerSocket;
-import java.net.Socket;
+import forms.serverFrmMain;
 
 public class Server {
 
+    public static void main(String[] args) {
+        new serverFrmMain().setVisible(true);
+    }
+/*
     public static void main(String[] args) {
         Server server = new Server();
         try {
@@ -39,7 +34,6 @@ public class Server {
                 //Request request = (Request) in.readObject();
 
                 Request request = (Request) new Receiver(socket).receive();
-
                 Response response = null;
 
                 int operation = request.getOperation();
@@ -80,4 +74,5 @@ public class Server {
         }
         return response;
     }
+ */
 }
