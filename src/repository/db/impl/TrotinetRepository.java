@@ -133,4 +133,21 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
             throw new RuntimeException(e);
         }
     }
+
+    public void update(Trotinet trotinet) {
+        try {
+            String query = "UPDATE trotinet SET vrstaTrotineta = '" + trotinet.getVrstaTrotineta() +
+                    "' , model = '" + trotinet.getModel() + "' WHERE trotinetID = " + trotinet.getTrotinetID();
+            System.out.println(query);
+            connection = DBConnectionFactory.getInstance().getConnection();
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            statement.close();
+            System.out.println("Uspesno azuriranje trotineta");
+        } catch (SQLException e) {
+            System.out.println("Neuspesno azuriranje trotineta");
+            throw new RuntimeException(e);
+        }
+    }
 }

@@ -196,6 +196,34 @@ public class Controller {
         }
     }
 
+    public void updateKorisnik(Korisnik korisnik) throws SQLException {
+        storageKorisnik.connect();
+        try {
+            storageKorisnik.update(korisnik);
+            storageKorisnik.commit();
+        } catch (SQLException e) {
+            storageKorisnik.rollback();
+            e.printStackTrace();
+            throw e;
+        } finally {
+            storageKorisnik.disconnect();
+        }
+    }
+
+    public void updateTrotinet(Trotinet trotinet) throws SQLException {
+        storageTrotinet.connect();
+        try {
+            storageTrotinet.update(trotinet);
+            storageTrotinet.commit();
+        } catch (SQLException e) {
+            storageTrotinet.rollback();
+            e.printStackTrace();
+            throw e;
+        } finally {
+            storageTrotinet.disconnect();
+        }
+    }
+
     public List<Osoba> getByBrojLK(Long brojLicneKarte) {
         return storageOsoba.getAllByCriteria(brojLicneKarte);
     }

@@ -1,5 +1,6 @@
 package repository.db.impl;
 
+import controller.Controller;
 import domain.GradEnum;
 import domain.Korisnik;
 import domain.TipKorisnika;
@@ -10,11 +11,12 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class KorisnikRepository implements DBRepository <Korisnik, String> {
+public class KorisnikRepository implements DBRepository<Korisnik, String> {
 
     Connection connection;
 
-    public KorisnikRepository() {}
+    public KorisnikRepository() {
+    }
 
     public List<Korisnik> getAll() {
         try {
@@ -52,7 +54,7 @@ public class KorisnikRepository implements DBRepository <Korisnik, String> {
     public List<Korisnik> getAllByCriteria(String username) {
         try {
             List<Korisnik> korisnici = new ArrayList<>();
-            String query = "SELECT korisnikID, brojLicneKarte, ime, prezime, email, grad, telefon, username, sifra, tipKorisnika FROM korisnik WHERE username = '" + username +"'";
+            String query = "SELECT korisnikID, brojLicneKarte, ime, prezime, email, grad, telefon, username, sifra, tipKorisnika FROM korisnik WHERE username = '" + username + "'";
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
@@ -82,7 +84,7 @@ public class KorisnikRepository implements DBRepository <Korisnik, String> {
 
     }
 
-    public void add(Korisnik korisnik){
+    public void add(Korisnik korisnik) {
         try {
             String query = "INSERT INTO korisnik (brojLicneKarte, ime, prezime, email, grad, telefon, username, sifra, tipKorisnika) VALUES (?,?,?,?,?,?,?,?,?)";
             System.out.println(query);
@@ -127,6 +129,26 @@ public class KorisnikRepository implements DBRepository <Korisnik, String> {
             System.out.println("Uspesno brisanje korisnika");
         } catch (SQLException e) {
             System.out.println("Neuspesno brisanje korisnika");
+            throw new RuntimeException(e);
+        }
+    }
+
+    public void update(Korisnik korisnik) {
+        try {
+            String query = "UPDATE korisnik SET brojLicneKarte = " + korisnik.getBrojLicneKarte() +
+                    ", ime = '" + korisnik.getIme() + "' , prezime = '" + korisnik.getPrezime() +
+                    "' , email  = '" + korisnik.getEmail() + "' , grad  = '" + korisnik.getGrad() +
+                    "' , telefon = '" + korisnik.getTelefon() + "', sifra = '" + korisnik.getSifra() +
+                    "'  , tipKorisnika  = '" + korisnik.getTipKorisnika() + "' WHERE username = '" + korisnik.getUsername() +"'";
+            System.out.println(query);
+            connection = DBConnectionFactory.getInstance().getConnection();
+
+            Statement statement = connection.createStatement();
+            statement.executeUpdate(query);
+            statement.close();
+            System.out.println("Uspesno azuriranje korisnika");
+        } catch (SQLException e) {
+            System.out.println("Neuspesno azuriranje korisnika");
             throw new RuntimeException(e);
         }
     }

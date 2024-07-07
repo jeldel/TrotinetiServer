@@ -66,10 +66,42 @@ public class HandleClientThread extends Thread {
                 return getAllKorisnikByUsername(request);
             case Operations.GET_ALL_OSOBE_BY_BROJ_LK:
                 return getOsobaByBrojLK(request);
+            case Operations.UPDATE_KORISNIK:
+                return updateKorisnik(request);
+            case Operations.UPDATE_TROTINET:
+                return updateTrotinet(request);
             default:
                 return null;
         }
 
+    }
+
+    private Response updateTrotinet(Request request) {
+        Response response = new Response();
+        try {
+            Trotinet trotinet = (Trotinet) request.getArgument();
+            Controller.getInstance().updateTrotinet(trotinet);
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(e);
+        }
+        return response;
+    }
+
+    private Response updateKorisnik(Request request) {
+        Response response = new Response();
+        try {
+            Korisnik korisnik = (Korisnik) request.getArgument();
+            Controller.getInstance().updateKorisnik(korisnik);
+            response.setResponseType(ResponseType.SUCCESS);
+        } catch (Exception e) {
+            e.printStackTrace();
+            response.setResponseType(ResponseType.ERROR);
+            response.setException(e);
+        }
+        return response;
     }
 
     private Response addKorisnik(Request request) {
@@ -271,7 +303,7 @@ public class HandleClientThread extends Thread {
     private Response deleteTrotinet(Request request) {
         Response response = new Response();
         try {
-            Controller.getInstance().deleteTrotinet((long) request.getOperation());
+            Controller.getInstance().deleteTrotinet((long) request.getArgument());
             response.setResponseType(ResponseType.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
@@ -284,7 +316,7 @@ public class HandleClientThread extends Thread {
     private Response deleteKorisnik(Request request) {
         Response response = new Response();
         try {
-            Controller.getInstance().deleteKorisnik(String.valueOf(request.getOperation()));
+            Controller.getInstance().deleteKorisnik(String.valueOf(request.getArgument()));
             response.setResponseType(ResponseType.SUCCESS);
         } catch (Exception e) {
             e.printStackTrace();
@@ -307,9 +339,4 @@ public class HandleClientThread extends Thread {
         }
         return response;
     }
-
-
-
-
-
 }
