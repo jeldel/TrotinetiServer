@@ -24,7 +24,7 @@ public class databaseConfiguration extends JDialog {
         setModal(true);
         getRootPane().setDefaultButton(buttonOK);
         setTitle("Konfiguracija baze");
-        setBounds(500, 200, 450, 300);
+        setBounds(400, 200, 450, 300);
         popuniFormu();
 
 
