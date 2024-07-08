@@ -1,6 +1,5 @@
 package repository.db.impl;
 
-import controller.Controller;
 import domain.GradEnum;
 import domain.Korisnik;
 import domain.TipKorisnika;

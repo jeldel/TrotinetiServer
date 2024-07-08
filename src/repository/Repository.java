@@ -6,7 +6,7 @@ public interface Repository<T, K> {
 
     void add(T param) throws Exception;
 
-    //int edit(T param) throws Exception;
+    void update(T param) throws Exception;
 
     void delete(K criteria) throws Exception;
 

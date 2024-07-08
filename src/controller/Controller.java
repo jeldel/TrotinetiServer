@@ -7,6 +7,17 @@ import repository.db.impl.OsobaRepository;
 import repository.db.impl.TrotinetRepository;
 import so.AbstractSO;
 import so.korisnik.AddKorisnikSO;
+import so.korisnik.DeleteKorisnikSO;
+import so.korisnik.GetAllKorisnikSO;
+import so.korisnik.UpdateKorisnikSO;
+import so.osoba.AddOsobaSO;
+import so.osoba.GetAllOsobaSO;
+import so.trotinet.AddTrotinetSO;
+import so.trotinet.DeleteTrotinetSO;
+import so.trotinet.GetAllTrotinetSO;
+import so.trotinet.UpdateTrotinetSO;
+import so.voznja.AddVoznjaSO;
+import so.voznja.GetAllVoznjaSO;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -37,78 +48,48 @@ public class Controller {
 
     //add
     public void addTrotinet(Trotinet trotinet) throws Exception {
-        storageTrotinet.connect();
-        try {
-            storageTrotinet.add(trotinet);
-            storageTrotinet.commit();
-        } catch (SQLException e) {
-            storageTrotinet.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageTrotinet.disconnect();
-        }
+       AbstractSO addTrotinetSO = new AddTrotinetSO();
+       addTrotinetSO.execute(trotinet);
     }
 
     public void addOsoba(Osoba osoba) throws Exception {
-        storageOsoba.connect();
-        try {
-            storageOsoba.add(osoba);
-            storageOsoba.commit();
-        } catch (SQLException e) {
-            storageOsoba.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageOsoba.disconnect();
-        }
+       AbstractSO addOsobaSO = new AddOsobaSO();
+       addOsobaSO.execute(osoba);
     }
 
     public void addKorisnik(Korisnik korisnik) throws Exception {
         AbstractSO addKorisnikSO = new AddKorisnikSO();
         addKorisnikSO.execute(korisnik);
-        /*storageKorisnik.connect();
-        try {
-            storageKorisnik.add(korisnik);
-            storageKorisnik.commit();
-        } catch (SQLException e) {
-            storageKorisnik.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageKorisnik.disconnect();
-        }*/
     }
 
     public void addVoznja(IznajmljivanjeTrotineta iznajmljivanjeTrotineta) throws Exception {
-        storageIznajmljivanje.connect();
-        try {
-            storageIznajmljivanje.add(iznajmljivanjeTrotineta);
-            storageIznajmljivanje.commit();
-        } catch (SQLException e) {
-            storageIznajmljivanje.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageIznajmljivanje.disconnect();
-        }
+        AbstractSO addVoznjaSO = new AddVoznjaSO();
+        addVoznjaSO.execute(iznajmljivanjeTrotineta);
     }
 
     //getAll
-    public List<Trotinet> getAllTrotinet() {
-        return storageTrotinet.getAll();
+    public List<Trotinet> getAllTrotinet() throws Exception{
+        GetAllTrotinetSO getAllTrotinetSO = new GetAllTrotinetSO();
+        getAllTrotinetSO.execute(new Trotinet());
+        return getAllTrotinetSO.getTrotineti();
     }
 
-    public List<Osoba> getAllOsoba() {
-        return storageOsoba.getAll();
+    public List<Osoba> getAllOsoba() throws Exception{
+        GetAllOsobaSO getAllOsobaSO = new GetAllOsobaSO();
+        getAllOsobaSO.execute(new Osoba());
+        return getAllOsobaSO.getOsobe();
     }
 
-    public List<IznajmljivanjeTrotineta> getAllVoznje() {
-        return storageIznajmljivanje.getAll();
+    public List<IznajmljivanjeTrotineta> getAllVoznje() throws Exception{
+        GetAllVoznjaSO getAllVoznjaSO = new GetAllVoznjaSO();
+        getAllVoznjaSO.execute(new IznajmljivanjeTrotineta());
+        return getAllVoznjaSO.getVoznje();
     }
 
-    public List<Korisnik> getAllKorisnik() {
-        return storageKorisnik.getAll();
+    public List<Korisnik> getAllKorisnik() throws Exception {
+       GetAllKorisnikSO getAllKorisnikSO = new GetAllKorisnikSO();
+       getAllKorisnikSO.execute(new Korisnik());
+       return getAllKorisnikSO.getKorisnici();
     }
 
     //login
@@ -164,64 +145,33 @@ public class Controller {
         return storageTrotinet.getAllByVrsta(vrstaTrotinetaEnum);
     }
 
-    public void deleteTrotinet(Long trotinetID) throws Exception {
-        storageTrotinet.connect();
-        try {
-            storageTrotinet.delete(trotinetID);
-            storageTrotinet.commit();
-        } catch (SQLException e) {
-            storageTrotinet.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageTrotinet.disconnect();
-        }
-    }
-
     public List<Korisnik> getAllByUsername(String username) {
         return storageKorisnik.getAllByCriteria(username);
     }
 
-    public void deleteKorisnik(String username) throws SQLException {
-        storageKorisnik.connect();
-        try {
-            storageKorisnik.delete(username);
-            storageKorisnik.commit();
-        } catch (SQLException e) {
-            storageKorisnik.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageKorisnik.disconnect();
-        }
+    //delete
+    public void deleteTrotinet(Long trotinetID) throws Exception {
+        Trotinet trotinet = Controller.getInstance().getTrotinetById(trotinetID);
+        AbstractSO deleteTrotinetSO = new DeleteTrotinetSO();
+        deleteTrotinetSO.execute(trotinet);
     }
 
-    public void updateKorisnik(Korisnik korisnik) throws SQLException {
-        storageKorisnik.connect();
-        try {
-            storageKorisnik.update(korisnik);
-            storageKorisnik.commit();
-        } catch (SQLException e) {
-            storageKorisnik.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageKorisnik.disconnect();
-        }
+    public void deleteKorisnik(String username) throws Exception {
+        List<Korisnik> korisnici = Controller.getInstance().getAllByUsername(username);
+        Korisnik korisnik = korisnici.get(0);
+        AbstractSO deleteKorisnikSO = new DeleteKorisnikSO();
+        deleteKorisnikSO.execute(korisnik);
     }
 
-    public void updateTrotinet(Trotinet trotinet) throws SQLException {
-        storageTrotinet.connect();
-        try {
-            storageTrotinet.update(trotinet);
-            storageTrotinet.commit();
-        } catch (SQLException e) {
-            storageTrotinet.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageTrotinet.disconnect();
-        }
+    //update
+    public void updateKorisnik(Korisnik korisnik) throws Exception {
+        AbstractSO updateKorisnikSO = new UpdateKorisnikSO();
+        updateKorisnikSO.execute(korisnik);
+    }
+
+    public void updateTrotinet(Trotinet trotinet) throws Exception {
+        AbstractSO updateTrotinetSO = new UpdateTrotinetSO();
+        updateTrotinetSO.execute(trotinet);
     }
 
     public List<Osoba> getByBrojLK(Long brojLicneKarte) {

@@ -8,12 +8,13 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class IznajmljivanjeRepository implements DBRepository <IznajmljivanjeTrotineta, String>{
+public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrotineta, String> {
     Connection connection;
 
-    public IznajmljivanjeRepository() {}
+    public IznajmljivanjeRepository() {
+    }
 
-    public List<IznajmljivanjeTrotineta> getAll(){
+    public List<IznajmljivanjeTrotineta> getAll() {
         try {
             List<IznajmljivanjeTrotineta> iznajmljivanjeTrotinetaList = new ArrayList<>();
             String query = "SELECT it.iznajmljivanjeID," +
@@ -97,7 +98,7 @@ public class IznajmljivanjeRepository implements DBRepository <IznajmljivanjeTro
                     " k.username," +
                     " k.sifra " +
                     "FROM iznajmljivanjeTrotineta it INNER JOIN trotinet t ON it.trotinetID = t.trotinetID " +
-                    "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID WHERE k.username = '"+ username +"'";
+                    "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID WHERE k.username = '" + username + "'";
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
@@ -139,7 +140,7 @@ public class IznajmljivanjeRepository implements DBRepository <IznajmljivanjeTro
         }
     }
 
-    public void add(IznajmljivanjeTrotineta iznajmljivanjeTrotineta){
+    public void add(IznajmljivanjeTrotineta iznajmljivanjeTrotineta) {
         Date sqlDate = new Date(iznajmljivanjeTrotineta.getDatumVreme().getTime());
         try {
             String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID)  VALUES (?,?,?,?,?)";
@@ -169,11 +170,16 @@ public class IznajmljivanjeRepository implements DBRepository <IznajmljivanjeTro
     }
 
     @Override
+    public void update(IznajmljivanjeTrotineta param) throws Exception {
+        throw new UnsupportedOperationException("No implementation yet.");
+    }
+
+    @Override
     public void delete(String criteria) throws Exception {
         throw new UnsupportedOperationException("No implementation yet.");
     }
 
-    public void addAll(List<IznajmljivanjeTrotineta> voznje){
+    public void addAll(List<IznajmljivanjeTrotineta> voznje) {
 
         try {
             String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID)  VALUES (?,?,?,?,?)";
@@ -182,7 +188,7 @@ public class IznajmljivanjeRepository implements DBRepository <IznajmljivanjeTro
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 
-            for(IznajmljivanjeTrotineta iznajmljivanjeTrotineta : voznje) {
+            for (IznajmljivanjeTrotineta iznajmljivanjeTrotineta : voznje) {
                 Date sqlDate = new Date(iznajmljivanjeTrotineta.getDatumVreme().getTime());
                 statement.setDate(1, sqlDate);
                 statement.setDouble(2, iznajmljivanjeTrotineta.getBrojSati());

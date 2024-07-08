@@ -34,6 +34,11 @@ public class OsobaRepository implements DBRepository <Osoba, Long> {
         }
     }
 
+    @Override
+    public void update(Osoba param) throws Exception {
+        throw new Exception("Nije jos implementirano");
+    }
+
     public List<Osoba> getAll() {
         try {
             List<Osoba> osobe = new ArrayList<>();
