@@ -23,6 +23,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                     " it.ukupnaCena," +
                     " it.korisnikID," +
                     " it.trotinetID," +
+                    " it.osobaBrojLK, " +
                     " t.trotinetID," +
                     " t.vrstaTrotineta," +
                     " t.model," +
@@ -30,12 +31,15 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                     " k.ime," +
                     " k.prezime," +
                     " k.email, " +
-                    "k.grad," +
+                    " k.grad," +
                     " k.telefon," +
                     " k.username," +
-                    " k.sifra " +
+                    " k.sifra, " +
+                    " o.brojLicneKarte, "+
+                    " o.ime, " +
+                    " o.prezime " +
                     "FROM iznajmljivanjeTrotineta it INNER JOIN trotinet t ON it.trotinetID = t.trotinetID " +
-                    "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID";
+                    "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID INNER JOIN osoba o ON it.osobaBrojLK = o.brojLicneKarte";
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
@@ -64,6 +68,12 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                 k.setUsername(rs.getString("k.username"));
                 k.setSifra(rs.getString("k.sifra"));
                 it.setKorisnik(k);
+
+                Osoba o = new Osoba();
+                o.setBrojLicneKarte(rs.getLong("o.brojLicneKarte"));
+                o.setIme(rs.getString("o.ime"));
+                o.setPrezime(rs.getString("o.prezime"));
+                it.setOsoba(o);
 
                 iznajmljivanjeTrotinetaList.add(it);
             }
@@ -86,6 +96,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                     " it.ukupnaCena," +
                     " it.korisnikID," +
                     " it.trotinetID," +
+                    " it.osobaBrojLK, " +
                     " t.trotinetID," +
                     " t.vrstaTrotineta," +
                     " t.model," +
@@ -93,12 +104,15 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                     " k.ime," +
                     " k.prezime," +
                     " k.email, " +
-                    "k.grad," +
+                    " k.grad," +
                     " k.telefon," +
                     " k.username," +
-                    " k.sifra " +
+                    " k.sifra, " +
+                    " o.brojLicneKarte, "+
+                    " o.ime, " +
+                    " o.prezime " +
                     "FROM iznajmljivanjeTrotineta it INNER JOIN trotinet t ON it.trotinetID = t.trotinetID " +
-                    "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID WHERE k.username = '" + username + "'";
+                    "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID INNER JOIN osoba o ON it.osobaBrojLK = o.brojLicneKarte WHERE k.username = '" + username + "'";
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
             Statement statement = connection.createStatement();
@@ -128,6 +142,12 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                 k.setSifra(rs.getString("k.sifra"));
                 it.setKorisnik(k);
 
+                Osoba o = new Osoba();
+                o.setBrojLicneKarte(rs.getLong("o.brojLicneKarte"));
+                o.setIme(rs.getString("o.ime"));
+                o.setPrezime(rs.getString("o.prezime"));
+                it.setOsoba(o);
+
                 iznajmljivanjeTrotinetaList.add(it);
             }
             rs.close();
@@ -143,7 +163,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
     public void add(IznajmljivanjeTrotineta iznajmljivanjeTrotineta) {
         Date sqlDate = new Date(iznajmljivanjeTrotineta.getDatumVreme().getTime());
         try {
-            String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID)  VALUES (?,?,?,?,?)";
+            String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID, osobaBrojLK)  VALUES (?,?,?,?,?,?)";
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
 
@@ -153,6 +173,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
             statement.setDouble(3, iznajmljivanjeTrotineta.getUkupnaCena());
             statement.setLong(4, iznajmljivanjeTrotineta.getKorisnik().getkorisnikID());
             statement.setLong(5, iznajmljivanjeTrotineta.getTrotinet().getTrotinetID());
+            statement.setLong(6, iznajmljivanjeTrotineta.getOsoba().getBrojLicneKarte());
 
             statement.executeUpdate();
             ResultSet rs = statement.getGeneratedKeys();
@@ -182,7 +203,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
     public void addAll(List<IznajmljivanjeTrotineta> voznje) {
 
         try {
-            String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID)  VALUES (?,?,?,?,?)";
+            String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID, osobaBrojLK)  VALUES (?,?,?,?,?,?)";
             System.out.println(query);
             connection = DBConnectionFactory.getInstance().getConnection();
 
@@ -195,6 +216,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                 statement.setDouble(3, iznajmljivanjeTrotineta.getUkupnaCena());
                 statement.setLong(4, iznajmljivanjeTrotineta.getKorisnik().getkorisnikID());
                 statement.setLong(5, iznajmljivanjeTrotineta.getTrotinet().getTrotinetID());
+                statement.setLong(6, iznajmljivanjeTrotineta.getOsoba().getBrojLicneKarte());
 
                 statement.executeUpdate();
                 System.out.println("Uspesno kreirana voznja");

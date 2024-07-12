@@ -70,6 +70,8 @@ public class HandleClientThread extends Thread {
                 return updateKorisnik(request);
             case Operations.UPDATE_TROTINET:
                 return updateTrotinet(request);
+            case Operations.ADD_ALL_VOZNJE:
+                return addAllVoznje(request);
             default:
                 return null;
         }
