@@ -1,16 +1,16 @@
 package so;
 
-import repository.Repository;
-import repository.db.DBConnectionFactory;
+import domain.AbstractDomainObject;
+import repository.db.DBBroker;
 
 import java.sql.SQLException;
 
 public abstract class AbstractSO {
 
-    public void execute(Object param) throws Exception {
+    public void execute(AbstractDomainObject ado) throws Exception {
         try {
-            precondition(param);
-            executeOperation(param);
+            precondition(ado);
+            executeOperation(ado);
             commitTransaction();
         } catch (Exception e) {
             rollbackTransaction();
@@ -18,17 +18,17 @@ public abstract class AbstractSO {
     }
 
 
-    protected abstract void precondition(Object param) throws Exception;
+    protected abstract void precondition(AbstractDomainObject ado) throws Exception;
 
-    protected abstract void executeOperation(Object param) throws Exception;
+    protected abstract void executeOperation( AbstractDomainObject ado) throws Exception;
 
 
     protected void commitTransaction() throws SQLException {
-        DBConnectionFactory.getInstance().getConnection().commit();
+        DBBroker.getInstance().getConnection().commit();
     }
 
     protected void rollbackTransaction() throws SQLException {
-        DBConnectionFactory.getInstance().getConnection().rollback();
+        DBBroker.getInstance().getConnection().rollback();
     }
 
 

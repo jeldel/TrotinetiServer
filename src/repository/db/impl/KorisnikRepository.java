@@ -3,7 +3,7 @@ package repository.db.impl;
 import domain.GradEnum;
 import domain.Korisnik;
 import domain.TipKorisnika;
-import repository.db.DBConnectionFactory;
+import repository.db.DBBroker;
 import repository.db.DBRepository;
 
 import java.sql.*;
@@ -22,7 +22,7 @@ public class KorisnikRepository implements DBRepository<Korisnik, String> {
             List<Korisnik> korisnici = new ArrayList<>();
             String query = "SELECT korisnikID, brojLicneKarte, ime, prezime, email, grad, telefon, username, sifra, tipKorisnika FROM korisnik";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -55,7 +55,7 @@ public class KorisnikRepository implements DBRepository<Korisnik, String> {
             List<Korisnik> korisnici = new ArrayList<>();
             String query = "SELECT korisnikID, brojLicneKarte, ime, prezime, email, grad, telefon, username, sifra, tipKorisnika FROM korisnik WHERE username = '" + username + "'";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -87,7 +87,7 @@ public class KorisnikRepository implements DBRepository<Korisnik, String> {
         try {
             String query = "INSERT INTO korisnik (brojLicneKarte, ime, prezime, email, grad, telefon, username, sifra, tipKorisnika) VALUES (?,?,?,?,?,?,?,?,?)";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setLong(1, korisnik.getBrojLicneKarte());
@@ -119,7 +119,7 @@ public class KorisnikRepository implements DBRepository<Korisnik, String> {
         try {
             String query = "DELETE FROM korisnik WHERE username = ? ";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setString(1, username);
@@ -140,7 +140,7 @@ public class KorisnikRepository implements DBRepository<Korisnik, String> {
                     "' , telefon = '" + korisnik.getTelefon() + "', sifra = '" + korisnik.getSifra() +
                     "'  , tipKorisnika  = '" + korisnik.getTipKorisnika() + "' WHERE username = '" + korisnik.getUsername() +"'";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);

@@ -10,6 +10,7 @@ import so.korisnik.AddKorisnikSO;
 import so.korisnik.DeleteKorisnikSO;
 import so.korisnik.GetAllKorisnikSO;
 import so.korisnik.UpdateKorisnikSO;
+import so.login.LoginSO;
 import so.osoba.AddOsobaSO;
 import so.osoba.GetAllOsobaSO;
 import so.trotinet.AddTrotinetSO;
@@ -19,7 +20,6 @@ import so.trotinet.UpdateTrotinetSO;
 import so.voznja.AddVoznjaSO;
 import so.voznja.GetAllVoznjaSO;
 
-import java.sql.SQLException;
 import java.util.List;
 
 public class Controller {
@@ -48,13 +48,13 @@ public class Controller {
 
     //add
     public void addTrotinet(Trotinet trotinet) throws Exception {
-       AbstractSO addTrotinetSO = new AddTrotinetSO();
-       addTrotinetSO.execute(trotinet);
+        AbstractSO addTrotinetSO = new AddTrotinetSO();
+        addTrotinetSO.execute(trotinet);
     }
 
     public void addOsoba(Osoba osoba) throws Exception {
-       AbstractSO addOsobaSO = new AddOsobaSO();
-       addOsobaSO.execute(osoba);
+        AbstractSO addOsobaSO = new AddOsobaSO();
+        addOsobaSO.execute(osoba);
     }
 
     public void addKorisnik(Korisnik korisnik) throws Exception {
@@ -68,71 +68,45 @@ public class Controller {
     }
 
     //getAll
-    public List<Trotinet> getAllTrotinet() throws Exception{
+    public List<Trotinet> getAllTrotinet() throws Exception {
         GetAllTrotinetSO getAllTrotinetSO = new GetAllTrotinetSO();
         getAllTrotinetSO.execute(new Trotinet());
         return getAllTrotinetSO.getTrotineti();
     }
 
-    public List<Osoba> getAllOsoba() throws Exception{
+    public List<Osoba> getAllOsoba() throws Exception {
         GetAllOsobaSO getAllOsobaSO = new GetAllOsobaSO();
         getAllOsobaSO.execute(new Osoba());
         return getAllOsobaSO.getOsobe();
     }
 
-    public List<IznajmljivanjeTrotineta> getAllVoznje() throws Exception{
+    public List<IznajmljivanjeTrotineta> getAllVoznje() throws Exception {
         GetAllVoznjaSO getAllVoznjaSO = new GetAllVoznjaSO();
         getAllVoznjaSO.execute(new IznajmljivanjeTrotineta());
         return getAllVoznjaSO.getVoznje();
     }
 
     public List<Korisnik> getAllKorisnik() throws Exception {
-       GetAllKorisnikSO getAllKorisnikSO = new GetAllKorisnikSO();
-       getAllKorisnikSO.execute(new Korisnik());
-       return getAllKorisnikSO.getKorisnici();
+        GetAllKorisnikSO getAllKorisnikSO = new GetAllKorisnikSO();
+        getAllKorisnikSO.execute(new Korisnik());
+        return getAllKorisnikSO.getKorisnici();
     }
 
     //login
-    public Korisnik login(String username, String password) throws Exception {
-        try {
-            storageKorisnik.connect();
-            List<Korisnik> korisnici = storageKorisnik.getAll();
-            storageKorisnik.commit();
-            for (Korisnik korisnik : korisnici) {
-                if (korisnik.getUsername().equals(username) && korisnik.getSifra().equals(password)) {
-                    ulogovanKorisnik = korisnik;
-                    return korisnik;
-                }
-            }
-            throw new Exception("Nepoznat korisnik");
-        } catch (Exception e) {
-            storageKorisnik.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageKorisnik.disconnect();
+    public Korisnik login(Korisnik korisnik) throws Exception {
+        LoginSO loginSO = new LoginSO();
+        loginSO.execute(korisnik);
+        return loginSO.getUlogovani();
+    }
+
+    //add all voznje
+    public void addAllVoznje(List<IznajmljivanjeTrotineta> voznje) throws Exception {
+        for(IznajmljivanjeTrotineta it : voznje){
+           addVoznja(it);
         }
     }
 
-    public Korisnik getUlogovanKorisnik() {
-        return ulogovanKorisnik;
-    }
-
-    public void addAllVoznje(List<IznajmljivanjeTrotineta> voznje) throws SQLException {
-        storageIznajmljivanje.connect();
-        try {
-            storageIznajmljivanje.addAll(voznje);
-            storageIznajmljivanje.commit();
-        } catch (SQLException e) {
-            storageIznajmljivanje.rollback();
-            e.printStackTrace();
-            throw e;
-        } finally {
-            storageIznajmljivanje.disconnect();
-        }
-    }
-
-    //getByID
+    //getByCriteria
     public Trotinet getTrotinetById(Long id) {
         return storageTrotinet.getById(id);
     }
@@ -147,6 +121,10 @@ public class Controller {
 
     public List<Korisnik> getAllByUsername(String username) {
         return storageKorisnik.getAllByCriteria(username);
+    }
+
+    public List<Osoba> getAllByBrojLK(Long brojLicneKarte) {
+        return storageOsoba.getAllByCriteria(brojLicneKarte);
     }
 
     //delete
@@ -174,8 +152,14 @@ public class Controller {
         updateTrotinetSO.execute(trotinet);
     }
 
-    public List<Osoba> getByBrojLK(Long brojLicneKarte) {
-        return storageOsoba.getAllByCriteria(brojLicneKarte);
+
+
+    public void setUlogovanKorisnik(Korisnik ulogovanKorisnik) {
+        this.ulogovanKorisnik = ulogovanKorisnik;
+    }
+
+    public Korisnik getUlogovanKorisnik() {
+        return ulogovanKorisnik;
     }
 
     public void setIzabranaOsoba(Osoba izabranaOsoba) {

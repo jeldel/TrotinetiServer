@@ -1,31 +1,27 @@
 package so.voznja;
 
+import domain.AbstractDomainObject;
 import domain.IznajmljivanjeTrotineta;
-import repository.db.DBRepository;
-import repository.db.impl.IznajmljivanjeRepository;
+import repository.db.DBBroker;
 import so.AbstractSO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetAllVoznjaSO extends AbstractSO {
     private List<IznajmljivanjeTrotineta> voznje;
-    private final DBRepository storageVoznje;
-
-    public GetAllVoznjaSO() {
-        storageVoznje = new IznajmljivanjeRepository();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if(!(param instanceof IznajmljivanjeTrotineta)){
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if(!(ado instanceof IznajmljivanjeTrotineta)){
             throw new Exception("Parametar nije validan");
         }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        List<IznajmljivanjeTrotineta> lista = storageVoznje.getAll();
-        voznje = lista;
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        List<AbstractDomainObject> lista = DBBroker.getInstance().selectAll(ado);
+        voznje = (ArrayList<IznajmljivanjeTrotineta>) (ArrayList<?>)lista;
     }
 
     public List<IznajmljivanjeTrotineta> getVoznje() {

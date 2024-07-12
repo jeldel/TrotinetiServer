@@ -1,28 +1,23 @@
 package so.korisnik;
 
+import domain.AbstractDomainObject;
 import domain.Korisnik;
-import repository.db.DBRepository;
-import repository.db.impl.KorisnikRepository;
+import repository.db.DBBroker;
 import so.AbstractSO;
 
 public class UpdateKorisnikSO extends AbstractSO {
-    private final DBRepository storageKorisnik;
-
-    public UpdateKorisnikSO() {
-        storageKorisnik = new KorisnikRepository();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if(param == null || !(param instanceof Korisnik)){
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if(ado == null || !(ado instanceof Korisnik)){
             throw new Exception("Parametar nije validan");
         }
 
-        Korisnik korisnik = (Korisnik) param;
+        Korisnik korisnik = (Korisnik) ado;
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageKorisnik.update(param);
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        DBBroker.getInstance().update(ado);
     }
 }

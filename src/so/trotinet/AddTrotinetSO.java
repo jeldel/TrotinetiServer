@@ -1,27 +1,25 @@
 package so.trotinet;
 
+import domain.AbstractDomainObject;
 import domain.Trotinet;
+import repository.db.DBBroker;
 import repository.db.DBRepository;
 import repository.db.impl.TrotinetRepository;
 import so.AbstractSO;
 
 public class AddTrotinetSO extends AbstractSO {
-    private final DBRepository storageTrotinet;
 
-    public AddTrotinetSO() {
-        storageTrotinet = new TrotinetRepository();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if(param == null || !(param instanceof Trotinet)){
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if(ado == null || !(ado instanceof Trotinet)){
             throw new Exception("Parametar nije validan");
         }
 
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageTrotinet.add((Trotinet) param);
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        DBBroker.getInstance().insert(ado);
     }
 }

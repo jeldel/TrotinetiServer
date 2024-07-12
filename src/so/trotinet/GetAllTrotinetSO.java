@@ -1,32 +1,28 @@
 package so.trotinet;
 
+import domain.AbstractDomainObject;
 import domain.Trotinet;
-import repository.db.DBRepository;
-import repository.db.impl.TrotinetRepository;
+import repository.db.DBBroker;
 import so.AbstractSO;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class GetAllTrotinetSO extends AbstractSO {
     private List<Trotinet> trotineti;
-    private final DBRepository storageTrotineti;
-
-    public GetAllTrotinetSO() {
-        storageTrotineti = new TrotinetRepository();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if(!(param instanceof Trotinet)){
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if(!(ado instanceof Trotinet)){
             throw new Exception("Parametar nije validan");
         }
 
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        List<Trotinet> lista = storageTrotineti.getAll();
-        trotineti = lista;
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        List<AbstractDomainObject> lista = DBBroker.getInstance().selectAll(ado);
+        trotineti = (ArrayList<Trotinet>) (ArrayList<?>) lista;
     }
 
     public List<Trotinet> getTrotineti() {

@@ -2,7 +2,7 @@ package repository.db.impl;
 
 import domain.Trotinet;
 import domain.VrstaTrotinetaEnum;
-import repository.db.DBConnectionFactory;
+import repository.db.DBBroker;
 import repository.db.DBRepository;
 
 import java.sql.*;
@@ -20,7 +20,7 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
             List<Trotinet> trotineti = new ArrayList<>();
             String query = "SELECT trotinetID, vrstaTrotineta, model FROM trotinet";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -50,7 +50,7 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
             List<Trotinet> trotineti = new ArrayList<>();
             String query = "SELECT trotinetID, vrstaTrotineta, model FROM trotinet WHERE vrstaTrotineta = '" + vrstaTrotinetaEnum + "'";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -75,7 +75,7 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
         try {
             String query = "SELECT trotinetID, vrstaTrotineta, model FROM trotinet WHERE trotinetID = " + id;
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             Trotinet t = new Trotinet();
@@ -98,7 +98,7 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
         try {
             String query = "INSERT INTO trotinet (vrstaTrotineta, model) VALUES (?,?)";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setString(1, trotinet.getVrstaTrotineta().name());
@@ -121,7 +121,7 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
         try {
             String query = "DELETE FROM trotinet WHERE trotinetID = ?";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, trotinetID);
@@ -139,7 +139,7 @@ public class TrotinetRepository implements DBRepository <Trotinet, Long> {
             String query = "UPDATE trotinet SET vrstaTrotineta = '" + trotinet.getVrstaTrotineta() +
                     "' , model = '" + trotinet.getModel() + "' WHERE trotinetID = " + trotinet.getTrotinetID();
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             Statement statement = connection.createStatement();
             statement.executeUpdate(query);

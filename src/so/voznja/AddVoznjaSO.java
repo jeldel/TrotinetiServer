@@ -1,27 +1,25 @@
 package so.voznja;
 
+import domain.AbstractDomainObject;
 import domain.IznajmljivanjeTrotineta;
+import repository.db.DBBroker;
 import repository.db.DBRepository;
 import repository.db.impl.IznajmljivanjeRepository;
 import so.AbstractSO;
 
 
 public class AddVoznjaSO extends AbstractSO {
-    private final DBRepository storageVoznje;
 
-    public AddVoznjaSO() {
-        storageVoznje = new IznajmljivanjeRepository();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if (param == null || !(param instanceof IznajmljivanjeTrotineta)) {
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if (ado == null || !(ado instanceof IznajmljivanjeTrotineta)) {
             throw new Exception("Parametar nije validan");
         }
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageVoznje.add(param);
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        DBBroker.getInstance().insert(ado);
     }
 }

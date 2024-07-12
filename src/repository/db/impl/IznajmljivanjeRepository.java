@@ -1,7 +1,7 @@
 package repository.db.impl;
 
 import domain.*;
-import repository.db.DBConnectionFactory;
+import repository.db.DBBroker;
 import repository.db.DBRepository;
 
 import java.sql.*;
@@ -41,7 +41,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                     "FROM iznajmljivanjeTrotineta it INNER JOIN trotinet t ON it.trotinetID = t.trotinetID " +
                     "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID INNER JOIN osoba o ON it.osobaBrojLK = o.brojLicneKarte";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
@@ -114,7 +114,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
                     "FROM iznajmljivanjeTrotineta it INNER JOIN trotinet t ON it.trotinetID = t.trotinetID " +
                     "INNER JOIN korisnik k ON it.korisnikID = k.korisnikID INNER JOIN osoba o ON it.osobaBrojLK = o.brojLicneKarte WHERE k.username = '" + username + "'";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
 
@@ -165,7 +165,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
         try {
             String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID, osobaBrojLK)  VALUES (?,?,?,?,?,?)";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
             statement.setDate(1, sqlDate);
@@ -205,7 +205,7 @@ public class IznajmljivanjeRepository implements DBRepository<IznajmljivanjeTrot
         try {
             String query = "INSERT INTO iznajmljivanjeTrotineta (datumVreme, brojSati, ukupnaCena, korisnikID, trotinetID, osobaBrojLK)  VALUES (?,?,?,?,?,?)";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
 

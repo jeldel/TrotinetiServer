@@ -5,6 +5,7 @@ import controller.Controller;
 import domain.*;
 
 import java.net.Socket;
+import java.util.ArrayList;
 import java.util.List;
 
 public class HandleClientThread extends Thread {
@@ -152,7 +153,7 @@ public class HandleClientThread extends Thread {
         Response response = new Response();
         Korisnik requestKorisnik = (Korisnik) request.getArgument();
         try {
-            Korisnik korisnik = Controller.getInstance().login(requestKorisnik.getUsername(), requestKorisnik.getSifra());
+            Korisnik korisnik = Controller.getInstance().login(requestKorisnik);
             response.setResponseType(ResponseType.SUCCESS);
             response.setResult(korisnik);
         } catch (Exception e) {
@@ -236,7 +237,7 @@ public class HandleClientThread extends Thread {
     private Response getOsobaByBrojLK(Request request) {
         Response response = new Response();
         try {
-            List<Osoba> osobe = Controller.getInstance().getByBrojLK((Long) request.getArgument());
+            List<Osoba> osobe = Controller.getInstance().getAllByBrojLK((Long) request.getArgument());
             response.setResponseType(ResponseType.SUCCESS);
             response.setResult(osobe);
         } catch (Exception e) {

@@ -1,7 +1,7 @@
 package repository.db.impl;
 
 import domain.Osoba;
-import repository.db.DBConnectionFactory;
+import repository.db.DBBroker;
 import repository.db.DBRepository;
 
 import java.sql.*;
@@ -18,7 +18,7 @@ public class OsobaRepository implements DBRepository <Osoba, Long> {
         try {
             String query = "INSERT INTO osoba (brojLicneKarte, ime, prezime) VALUES (?,?,?)";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, osoba.getBrojLicneKarte());
@@ -44,7 +44,7 @@ public class OsobaRepository implements DBRepository <Osoba, Long> {
             List<Osoba> osobe = new ArrayList<>();
             String query = "SELECT brojLicneKarte, ime, prezime FROM osoba";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -69,7 +69,7 @@ public class OsobaRepository implements DBRepository <Osoba, Long> {
             List<Osoba> osobe = new ArrayList<>();
             String query = "SELECT brojLicneKarte, ime, prezime FROM osoba WHERE brojLicneKarte = " + brojLicneKarte;
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
             Statement statement = connection.createStatement();
             ResultSet rs = statement.executeQuery(query);
             while (rs.next()) {
@@ -94,7 +94,7 @@ public class OsobaRepository implements DBRepository <Osoba, Long> {
         try {
             String query = "DELETE FROM osoba WHERE brojLicneKarte = ? ";
             System.out.println(query);
-            connection = DBConnectionFactory.getInstance().getConnection();
+            connection = DBBroker.getInstance().getConnection();
 
             PreparedStatement statement = connection.prepareStatement(query);
             statement.setLong(1, brojLicneKarte);

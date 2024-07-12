@@ -1,28 +1,23 @@
 package so.trotinet;
 
+import domain.AbstractDomainObject;
 import domain.Trotinet;
-import repository.db.DBRepository;
-import repository.db.impl.TrotinetRepository;
+import repository.db.DBBroker;
 import so.AbstractSO;
 
 
 public class UpdateTrotinetSO extends AbstractSO {
-    private final DBRepository storageTrotinet;
-
-    public UpdateTrotinetSO() {
-        storageTrotinet = new TrotinetRepository();
-    }
 
     @Override
-    protected void precondition(Object param) throws Exception {
-        if(param == null || !(param instanceof Trotinet)){
+    protected void precondition(AbstractDomainObject ado) throws Exception {
+        if(!(ado instanceof Trotinet)){
             throw new Exception("Parametar nije validan");
         }
 
     }
 
     @Override
-    protected void executeOperation(Object param) throws Exception {
-        storageTrotinet.update((Trotinet) param);
+    protected void executeOperation(AbstractDomainObject ado) throws Exception {
+        DBBroker.getInstance().update(ado);
     }
 }
