@@ -9,7 +9,7 @@ import so.AbstractSO;
 public class UpdateTrotinetSO extends AbstractSO {
 
     @Override
-    protected void precondition(AbstractDomainObject ado) throws Exception {
+    protected void validate(AbstractDomainObject ado) throws Exception {
         if(!(ado instanceof Trotinet)){
             throw new Exception("Parametar nije validan");
         }

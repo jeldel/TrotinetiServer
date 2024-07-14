@@ -9,7 +9,7 @@ public class AddOsobaSO extends AbstractSO {
 
 
     @Override
-    protected void precondition(AbstractDomainObject ado) throws Exception {
+    protected void validate(AbstractDomainObject ado) throws Exception {
         if (ado == null || !(ado instanceof Osoba)) {
             throw new Exception("Parametar nije validan");
         }

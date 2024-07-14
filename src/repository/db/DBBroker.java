@@ -5,6 +5,7 @@ import constants.MyServerConstant;
 import java.io.FileInputStream;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Properties;
 
 import domain.AbstractDomainObject;
@@ -49,7 +50,6 @@ public class DBBroker {
         return ado.vratiListu(rs);
     }
 
-
     public ArrayList<AbstractDomainObject> selectWithCriteria(AbstractDomainObject ado) throws SQLException {
         String upit = "SELECT * FROM " + ado.nazivTabele() + " " + ado.alijas()
                 + " " + ado.join() + " " + ado.uslovZaSelect();
@@ -57,6 +57,16 @@ public class DBBroker {
         Statement s = connection.createStatement();
         ResultSet rs = s.executeQuery(upit);
         return ado.vratiListu(rs);
+    }
+
+    public AbstractDomainObject selectOneWithCriteria(AbstractDomainObject ado) throws SQLException {
+        String upit = "SELECT * FROM " + ado.nazivTabele() + " WHERE " + ado.uslov();
+        System.out.println(upit);
+        Statement s = connection.createStatement();
+        ResultSet rs = s.executeQuery(upit);
+        List<AbstractDomainObject> lista = ado.vratiListu(rs);
+        AbstractDomainObject abstractDomainObject = lista.get(0);
+        return abstractDomainObject;
     }
 
     public PreparedStatement insert(AbstractDomainObject ado) throws SQLException {

@@ -8,9 +8,8 @@ import so.AbstractSO;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetAllVoznjaSO extends AbstractSO {
-    private List<IznajmljivanjeTrotineta> voznje;
-
+public class GetAllVoznjaByCriteriaSO extends AbstractSO {
+    private List<IznajmljivanjeTrotineta> iznajmljivanjeTrotinetaList;
     @Override
     protected void validate(AbstractDomainObject ado) throws Exception {
         if(!(ado instanceof IznajmljivanjeTrotineta)){
@@ -20,11 +19,11 @@ public class GetAllVoznjaSO extends AbstractSO {
 
     @Override
     protected void executeOperation(AbstractDomainObject ado) throws Exception {
-        List<AbstractDomainObject> lista = DBBroker.getInstance().selectAll(ado);
-        voznje = (ArrayList<IznajmljivanjeTrotineta>) (ArrayList<?>)lista;
+        List<AbstractDomainObject> lista = DBBroker.getInstance().selectWithCriteria(ado);
+        iznajmljivanjeTrotinetaList = (ArrayList<IznajmljivanjeTrotineta>) (ArrayList<?>)lista;
     }
 
-    public List<IznajmljivanjeTrotineta> getVoznje() {
-        return voznje;
+    public List<IznajmljivanjeTrotineta> getIznajmljivanjeTrotinetaList() {
+        return iznajmljivanjeTrotinetaList;
     }
 }

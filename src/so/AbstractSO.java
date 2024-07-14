@@ -9,7 +9,7 @@ public abstract class AbstractSO {
 
     public void execute(AbstractDomainObject ado) throws Exception {
         try {
-            precondition(ado);
+            validate(ado);
             executeOperation(ado);
             commitTransaction();
         } catch (Exception e) {
@@ -18,7 +18,7 @@ public abstract class AbstractSO {
     }
 
 
-    protected abstract void precondition(AbstractDomainObject ado) throws Exception;
+    protected abstract void validate(AbstractDomainObject ado) throws Exception;
 
     protected abstract void executeOperation( AbstractDomainObject ado) throws Exception;
 

@@ -1,32 +1,29 @@
-package so.osoba;
+package so.trotinet;
 
 import domain.AbstractDomainObject;
-import domain.Osoba;
+import domain.Trotinet;
 import repository.db.DBBroker;
 import so.AbstractSO;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class GetAllOsobaSO extends AbstractSO {
-
-    private List<Osoba> osobe;
-
+public class GetAllTrotinetByCriteriaSO extends AbstractSO {
+    private List<Trotinet> trotineti;
     @Override
     protected void validate(AbstractDomainObject ado) throws Exception {
-        if(!(ado instanceof Osoba)){
+        if(!(ado instanceof Trotinet)){
             throw new Exception("Parametar nije validan");
         }
-
     }
 
     @Override
     protected void executeOperation(AbstractDomainObject ado) throws Exception {
-        List<AbstractDomainObject> lista = DBBroker.getInstance().selectAll(ado);
-        osobe = (ArrayList<Osoba>) (ArrayList<?>)lista;
+        List<AbstractDomainObject> lista = DBBroker.getInstance().selectWithCriteria(ado);
+        trotineti = (ArrayList<Trotinet>) (ArrayList<?>)lista;
     }
 
-    public List<Osoba> getOsobe() {
-        return osobe;
+    public List<Trotinet> getTrotineti() {
+        return trotineti;
     }
 }

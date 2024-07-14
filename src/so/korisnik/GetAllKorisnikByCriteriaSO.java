@@ -5,7 +5,12 @@ import domain.Korisnik;
 import repository.db.DBBroker;
 import so.AbstractSO;
 
-public class UpdateKorisnikSO extends AbstractSO {
+import java.util.ArrayList;
+import java.util.List;
+
+public class GetAllKorisnikByCriteriaSO extends AbstractSO {
+
+    private List<Korisnik> korisnici;
 
     @Override
     protected void validate(AbstractDomainObject ado) throws Exception {
@@ -16,6 +21,11 @@ public class UpdateKorisnikSO extends AbstractSO {
 
     @Override
     protected void executeOperation(AbstractDomainObject ado) throws Exception {
-        DBBroker.getInstance().update(ado);
+        List<AbstractDomainObject> lista = DBBroker.getInstance().selectWithCriteria(ado);
+        korisnici = (ArrayList<Korisnik>) (ArrayList<?>)lista;
+    }
+
+    public List<Korisnik> getKorisnici() {
+        return korisnici;
     }
 }

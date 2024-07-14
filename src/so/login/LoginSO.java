@@ -12,7 +12,7 @@ public class LoginSO extends AbstractSO {
     Korisnik ulogovaniKorisnik;
 
     @Override
-    protected void precondition(AbstractDomainObject ado) throws Exception {
+    protected void validate(AbstractDomainObject ado) throws Exception {
         if (!(ado instanceof Korisnik)) {
             throw new Exception("Parametar nije klase korisnik!");
         }

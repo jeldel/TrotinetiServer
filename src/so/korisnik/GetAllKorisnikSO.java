@@ -13,7 +13,7 @@ public class GetAllKorisnikSO extends AbstractSO {
     private List<Korisnik> korisnici;
 
     @Override
-    protected void precondition(AbstractDomainObject ado) throws Exception {
+    protected void validate(AbstractDomainObject ado) throws Exception {
         if(!(ado instanceof Korisnik)){
             throw new Exception("Parametar nije validan");
         }

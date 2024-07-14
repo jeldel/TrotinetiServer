@@ -8,7 +8,7 @@ import so.AbstractSO;
 public class DeleteTrotinetSO extends AbstractSO {
 
     @Override
-    protected void precondition(AbstractDomainObject ado) throws Exception {
+    protected void validate(AbstractDomainObject ado) throws Exception {
         if(ado == null || !(ado instanceof Trotinet)){
             throw new Exception("Parametar nije validan");
         }
